@@ -23,7 +23,7 @@ services:
       context: ./player-stat-collector
       dockerfile: Dockerfile
     environment:
-      LISTEN: ":8080"
+      LISTEN: ":80"
       MYSQL_DSN: "${MYSQL_DSN}"
       FLUSH_EVERY: "1m"
       BATCH_MAX: "2000"
@@ -40,12 +40,12 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - "34201:8080"
+      - "34201:80"
     volumes:
       - ingest_wal:/app/wal
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/readyz >/dev/null 2>&1"]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:80/readyz >/dev/null 2>&1"]
       interval: 5s
       timeout: 2s
       retries: 30

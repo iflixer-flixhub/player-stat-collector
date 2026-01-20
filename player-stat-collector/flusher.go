@@ -20,7 +20,7 @@ func insertBatch(ctx context.Context, db *sql.DB, batch []Event) error {
 		if i > 0 {
 			sb.WriteString(",")
 		}
-		sb.WriteString("(?,?,?,?,?,?,?,?)")
+		sb.WriteString("(?,?,?,?,?,?,?,?,?)")
 		args = append(args, e.TS, e.UserID, e.DomainID, e.GeoID, e.GeoGroupID, e.DomainTypeID, e.VisitorIP, e.FileID, e.EventName)
 	}
 
