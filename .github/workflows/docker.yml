@@ -34,6 +34,13 @@ jobs:
           echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           echo "tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
 
+      - name: Debug workspace
+        run: |
+          pwd
+          ls -la
+          ls -la player-stat-collector || true
+          find . -maxdepth 3 -name Dockerfile -print
+
       - name: Build & Push 
         uses: docker/build-push-action@v6
         with:
