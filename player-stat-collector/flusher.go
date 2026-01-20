@@ -13,7 +13,7 @@ import (
 func insertBatch(ctx context.Context, db *sql.DB, batch []Event) error {
 	sb := strings.Builder{}
 	sb.WriteString(`INSERT INTO player_pay_log
-(created_at,user_id,domain_id,geo_group_id,domain_type_id,visitor_ip,file_id,event) VALUES `)
+(created_at,user_id,domain_id,geo_id,geo_group_id,domain_type_id,visitor_ip,file_id,event) VALUES `)
 
 	args := make([]any, 0, len(batch)*8)
 	for i, e := range batch {
@@ -21,7 +21,7 @@ func insertBatch(ctx context.Context, db *sql.DB, batch []Event) error {
 			sb.WriteString(",")
 		}
 		sb.WriteString("(?,?,?,?,?,?,?,?)")
-		args = append(args, e.TS, e.UserID, e.DomainID, e.GeoGroupID, e.DomainTypeID, e.VisitorIP, e.FileID, e.EventName)
+		args = append(args, e.TS, e.UserID, e.DomainID, e.GeoID, e.GeoGroupID, e.DomainTypeID, e.VisitorIP, e.FileID, e.EventName)
 	}
 
 	ctxTO, cancel := context.WithTimeout(ctx, 10*time.Second)
