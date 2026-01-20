@@ -37,8 +37,8 @@ jobs:
       - name: Build & Push 
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./player-stat-collector
+          file: Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
