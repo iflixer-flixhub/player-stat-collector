@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./player-stat-collector
-          file: Dockerfile
+          file:  ./player-stat-collector/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
