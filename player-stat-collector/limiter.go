@@ -7,6 +7,7 @@ import "net/http"
 type limiter struct{ ch chan struct{} }
 
 func newLimiter(n int) *limiter { return &limiter{ch: make(chan struct{}, n)} }
+
 func (l *limiter) Wrap(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		select {

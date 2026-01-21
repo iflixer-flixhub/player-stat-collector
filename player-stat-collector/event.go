@@ -39,16 +39,16 @@ func buildEvent(r *http.Request, dc *DomainCache, geo *GeoMapper) (Event, error)
 	domainName := strings.ToLower(strings.TrimSpace(q.Get("domain")))
 
 	// если в рефе есть домен - используется он
-	refDomain := refererDomain(r)
-	if refDomain != "" {
-		domainName = refDomain
-	}
+	// refDomain := refererDomain(r)
+	// if refDomain != "" {
+	// 	domainName = refDomain
+	// }
 
-	// если в ORIGIN есть домен - используется он. высший приоритет
-	origDomain := originDomain(r)
-	if origDomain != "" {
-		domainName = origDomain
-	}
+	// // если в ORIGIN есть домен - используется он. высший приоритет
+	// origDomain := originDomain(r)
+	// if origDomain != "" {
+	// 	domainName = origDomain
+	// }
 
 	if domainName == "" {
 		return Event{}, errors.New("no domain param")

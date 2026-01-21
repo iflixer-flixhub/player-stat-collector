@@ -26,6 +26,7 @@ services:
       LISTEN: ":80"
       MYSQL_DSN: "${MYSQL_DSN}"
       FLUSH_EVERY: "1m"
+      CORS_ALLOWED_HOST: "cis-bel-back.orb.local"
       BATCH_MAX: "2000"
       QUEUE_SIZE: "200000"
       DOMAIN_RELOAD_EVERY: "1m"

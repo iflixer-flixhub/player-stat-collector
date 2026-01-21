@@ -76,7 +76,7 @@ func main() {
 	go flusher(ctx, db, wal, events, cfg.FlushEvery, cfg.BatchMax)
 
 	mux := http.NewServeMux()
-	mux.Handle("/metrics", promhttp.Handler())
+	mux.Handle("/metrics/w8Z", promhttp.Handler())
 
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -181,9 +181,20 @@ func main() {
 	})
 
 	lim := newLimiter(cfg.ReqMaxInFlight)
+	limHandler := lim.Wrap(mux)
+
+	corsHandler := Middleware(CorsOptions{
+		Domain:           cfg.CorsAllowedHost,
+		AllowApex:        false, // только поддомены
+		AllowCredentials: false, // если нужны cookies/Authorization
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		MaxAge:           86400,
+	})(limHandler)
+
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           lim.Wrap(mux),
+		Handler:           corsHandler,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      10 * time.Second,

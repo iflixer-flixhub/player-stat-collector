@@ -8,6 +8,8 @@ type Config struct {
 	ListenAddr string
 	MySQLDSN   string
 
+	CorsAllowedHost string
+
 	FlushEvery time.Duration
 	BatchMax   int
 	QueueSize  int
@@ -27,6 +29,8 @@ func loadConfig() Config {
 	return Config{
 		ListenAddr: env("LISTEN", ":8080"),
 		MySQLDSN:   mustEnv("MYSQL_DSN"),
+
+		CorsAllowedHost: mustEnv("CORS_ALLOWED_HOST"),
 
 		FlushEvery: envDur("FLUSH_EVERY", 5*time.Minute),
 		BatchMax:   envInt("BATCH_MAX", 2000),
