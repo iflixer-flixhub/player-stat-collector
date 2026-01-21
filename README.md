@@ -9,13 +9,14 @@ https://log.flixcdn.space/log?event=play&domain=piratka.biz&file_id=109454
 curl -i "http://localhost:34201/healthz"
 curl -i "http://localhost:34201/readyz"
 curl -i "http://localhost:34201/log?event=play&domain=piratka.biz&file_id=109454"
-curl -i "http://localhost:34201/metrics"
-curl -s "http://localhost:34201/metrics" | grep -E "wal|flushed|dropped|queue"
+curl -i "http://localhost:34201/e/play?domain=piratka.biz&file_id=109454"
+curl -i "http://localhost:34201/metrics/w8Z"
+curl -s "http://localhost:34201/metrics/w8Z" | grep -E "wal|flushed|dropped|queue"
 
 https://ingest.player-stat-collector.orb.local/healthz
 https://ingest.player-stat-collector.orb.local/readyz
 https://ingest.player-stat-collector.orb.local/log?event=play&domain=piratka.biz&file_id=109454
-https://ingest.player-stat-collector.orb.local/metrics
+https://ingest.player-stat-collector.orb.local/metrics/w8Z
 
 https://ingest.player-stat-collector.orb.local/debug/domain-cache
 
