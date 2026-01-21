@@ -14,6 +14,11 @@ var (
 		[]string{"path"},
 	)
 
+	mPlayerEvent = prometheus.NewCounterVec(
+		prometheus.CounterOpts{Name: "ingest_player_events_total", Help: "Total Player events requests"},
+		[]string{"event"},
+	)
+
 	mEnqueued = prometheus.NewCounter(prometheus.CounterOpts{Name: "ingest_events_enqueued_total", Help: "Events enqueued"})
 	mDropped  = prometheus.NewCounter(prometheus.CounterOpts{Name: "ingest_events_dropped_total", Help: "Events dropped (queue full/bad/wal error)"})
 	mFlushed  = prometheus.NewCounter(prometheus.CounterOpts{Name: "ingest_events_flushed_total", Help: "Events flushed to MySQL"})

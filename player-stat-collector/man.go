@@ -16,6 +16,7 @@ import (
 
 func init() {
 	prometheus.MustRegister(
+		mPlayerEvent,
 		mReqTotal, mReqDur,
 		mEnqueued, mDropped, mFlushed, mFlushErr,
 		mQueueLen, mBufLen,
@@ -181,7 +182,9 @@ func main() {
 	})
 
 	lim := newLimiter(cfg.ReqMaxInFlight)
-	limHandler := lim.Wrap(mux)
+	handler := lim.Wrap(mux)
+
+	handler = httpMetrics(handler)
 
 	corsHandler := Middleware(CorsOptions{
 		Domain:           cfg.CorsAllowedHost,
@@ -190,7 +193,7 @@ func main() {
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		MaxAge:           86400,
-	})(limHandler)
+	})(handler)
 
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,

@@ -87,5 +87,7 @@ func buildEvent(r *http.Request, dc *DomainCache, geo *GeoMapper) (Event, error)
 		event.GeoGroupID = country.GroupID
 	}
 
+	mPlayerEvent.WithLabelValues(ev).Inc()
+
 	return event, nil
 }
