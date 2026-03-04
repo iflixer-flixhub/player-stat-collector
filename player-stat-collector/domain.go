@@ -63,6 +63,12 @@ func (c *DomainCache) Snapshot() []DomainRow {
 	return out
 }
 
+func (c *DomainCache) Count() int {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return len(c.m)
+}
+
 func (c *DomainCache) Get(ctx context.Context, name string) (row DomainRow, err error) {
 	c.mu.RLock()
 	defer c.mu.RUnlock()

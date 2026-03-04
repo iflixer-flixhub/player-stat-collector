@@ -58,6 +58,12 @@ func (g *GeoMapper) Snapshot() []Country {
 	return out
 }
 
+func (g *GeoMapper) Count() int {
+	g.mu.RLock()
+	defer g.mu.RUnlock()
+	return len(g.iso)
+}
+
 func (g *GeoMapper) Get(iso2 string) *Country {
 	isoCode := IsoCode(strings.ToUpper(strings.TrimSpace(iso2)))
 	if len(isoCode) != 2 {

@@ -181,6 +181,49 @@ func main() {
 		_ = json.NewEncoder(w).Encode(resp)
 	})
 
+	mux.HandleFunc("/debug/health", func(w http.ResponseWriter, r *http.Request) {
+		cp, segs, bytes, walErr := wal.Stats()
+
+		wal.readMu.Lock()
+		rp := wal.readPos
+		wal.readMu.Unlock()
+
+		mysqlCtx, mysqlCancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer mysqlCancel()
+		mysqlErr := db.PingContext(mysqlCtx)
+
+		resp := map[string]any{
+			"time":          time.Now().UTC().Format(time.RFC3339),
+			"queue_len":     len(events),
+			"queue_cap":     cap(events),
+			"domain_count":  dc.Count(),
+			"country_count": geo.Count(),
+			"wal": map[string]any{
+				"segments":   segs,
+				"size_bytes": bytes,
+				"commit":     cp,
+				"read_pos":   rp,
+			},
+			"mysql_ok": mysqlErr == nil,
+		}
+
+		if walErr != nil {
+			resp["wal_error"] = walErr.Error()
+		}
+		if mysqlErr != nil {
+			resp["mysql_error"] = mysqlErr.Error()
+		}
+
+		status := http.StatusOK
+		if walErr != nil || mysqlErr != nil {
+			status = http.StatusServiceUnavailable
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(status)
+		_ = json.NewEncoder(w).Encode(resp)
+	})
+
 	lim := newLimiter(cfg.ReqMaxInFlight)
 	handler := lim.Wrap(mux)
 
