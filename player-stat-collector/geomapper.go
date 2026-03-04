@@ -64,11 +64,11 @@ func (g *GeoMapper) Get(iso2 string) *Country {
 		return nil
 	}
 	g.mu.RLock()
+	defer g.mu.RUnlock()
 	v, ok := g.iso[isoCode]
 	if !ok {
 		return nil
 	}
-	g.mu.RUnlock()
 	return &v
 }
 
